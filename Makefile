@@ -1,16 +1,13 @@
 CC = gcc
 CFLAGS = -Wall -O2 -pedantic -ansi -g -s
-LDFLAGS = -L. -lstack -g 
+LDFLAGS = -L. -lqueue -g 
 
 # Archivos fuente y objetos
-SRCS = p2_e1a.c p2_e1b.c vertex.c
+SRCS = p3_e1.c p3_e2b.c p3_e2a.c
 OBJS = $(SRCS:.c=.o)
 
-SRCS_BIS = p2_e1abis.c p2_e1bbis.c p2_e2bis.c stack.c
-OBJS_BIS = $(SRCS_BIS:.c=.o)
-
 # Ejecutables
-all: p2_e1a p2_e1b p2_e2 p2_e1abis p2_e1bbis p2_e2bis
+all: p3_e1 p3_e2a p3_e2b
 
 # Compilación de los primeros tres programas con libstack
 p2_e1a: p2_e1a.o vertex.o
@@ -32,8 +29,15 @@ p2_e1bbis: p2_e1bbis.o vertex.o stack.o
 p2_e2bis: p2_e2bis.o vertex.o graph.o stack.o
 	$(CC) -o $@ $^
 
-# Regla general para compilar cualquier .c en un .o
-%.o: %.c
+# Compilación de los .o
+
+graph.o: graph.c graph.h vertex.h types.h stack.h file_utils.h
+	$(CC) -c $(CFLAGS) -o $@ $<
+
+vertex.o: vertex.c vertex.h types.h
+	$(CC) -c $(CFLAGS) -o $@ $<
+
+queue.o: queue.c queue.h types.h
 	$(CC) -c $(CFLAGS) -o $@ $<
 
 clean:
