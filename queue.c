@@ -96,7 +96,13 @@ size_t queue_size(const Queue *q)
 
 int queue_print(FILE *fp, const Queue *q, p_queue_ele_print f)
 {
+    int i, size = 0;
 
+    for (i = (q->front - q->data) % MAX_QUEUE; i < (q->rear - q->data - 1) % MAX_QUEUE; i++)
+        if(f(fp, q->data[i]))
+            size++;;
+    
+    return size;
 }
 
 /*

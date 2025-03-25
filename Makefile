@@ -40,5 +40,8 @@ vertex.o: vertex.c vertex.h types.h
 queue.o: queue.c queue.h types.h
 	$(CC) -c $(CFLAGS) -o $@ $<
 
+stack.o: stack.c stack.h types.h file_utils.h
+	$(CC) -c $(CFLAGS) -o $@ $<
+
 clean:
 	rm -f *.o p2_e1a p2_e1b p2_e2 p2_e1abis p2_e1bbis p2_e2bis
