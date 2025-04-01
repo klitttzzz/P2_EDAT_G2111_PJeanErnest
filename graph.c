@@ -11,10 +11,13 @@
 #include <string.h>
 #include "graph.h"
 #include "stack.h"
+#include "queue.h"
 #include "vertex.h"
 #define MAX_VTX 4096
 
 /* START [Private_functions] */
+long *graph_getWhiteConnectionsFromId(const Graph *g, long id);
+int graph_getNumberOfWhiteConnectionsFromId(const Graph *g, long id);
 int _graph_findVertexByTag(const Graph * g, char *tag);
 Vertex* _graph_findVertexById(const Graph * g, long id);
 Status _graph_insertEdgeFromIndices(Graph *g, const long origIx, const long destIx);
@@ -238,6 +241,46 @@ long *graph_getConnectionsFromTag(const Graph *g, char *tag)
 
 
 /* START [Private_functions] */
+long *graph_getWhiteConnectionsFromId(const Graph *g, long id)
+{
+    int i, j = 0;
+
+    long *arrayIDs = NULL;
+
+    if (!(arrayIDs = calloc(graph_getNumberOfConnectionsFromId(g, id), sizeof(long))))
+        return NULL;
+
+    for (i = 0; i < g->num_vertices; i++)
+    {
+        if (graph_connectionExists(g, id, vertex_getId(g->vertices[i])) == TRUE && vertex_getState(g->vertices[i]) == WHITE)
+        {
+            arrayIDs[j] = vertex_getId(g->vertices[i]);
+            j++;
+        }
+    }
+
+    return arrayIDs;
+}
+
+int graph_getNumberOfWhiteConnectionsFromId(const Graph *g, long id)
+{
+    int i, counter = 0;
+    if(!g || !id){
+        return -1;
+    }
+
+    for (i = 0; i < g->num_vertices; i++)
+    {
+        if (g->connections[id][vertex_getId(g->vertices[i])] == TRUE && vertex_getState(g->vertices[i]) == WHITE)
+        {
+            counter++;
+        }
+    }
+
+    return counter;
+}
+
+
 int _graph_findVertexByTag(const Graph * g, char *tag){
     int i;
     for (i = 0; i < g->num_vertices; i++)
@@ -324,10 +367,80 @@ void _graph_setVertexState (Graph *g, Label l){
 }
 /* END [Private_functions] */
 
+Status graph_breathSearch (Graph *g, long from_id, long to_id) 
+{
+    Queue *q = NULL;
+    Vertex *v = NULL;
+    int i, j, index = 0, size;
+    long id, *arrayIds;
 
+    if(!g || from_id == -1 || to_id == -1)
+        return ERROR;
 
+    _graph_setVertexState(g, WHITE);
 
+    if(!(q = queue_new())) return ERROR;
 
+    for ( i = 0; i < g->num_vertices; i++)
+       if(vertex_getId(g->vertices[i])==from_id)   
+        index=i;
+    
+    if(index<0)
+    {
+        queue_free(q);
+        return ERROR;
+    }
+
+    vertex_setState(g->vertices[index],BLACK);
+    
+    if(!queue_push(q,(void *)g->vertices[index]))
+    {    
+        queue_free(q);
+        return ERROR;
+    }
+
+    while(!queue_isEmpty(q)){
+        v=(Vertex*)queue_pop(q);
+        if (!v) 
+        {
+            queue_free(q);
+            return ERROR;
+        }
+        vertex_setState(v, BLACK);
+        vertex_print(stdout,v);
+        printf("\n");
+        if(vertex_getId(v)==to_id)
+        {
+            queue_free(q);
+            return OK;
+
+        }else
+        {
+            id=vertex_getId(v);
+            arrayIds = graph_getWhiteConnectionsFromId(g, id);
+            size = graph_getNumberOfWhiteConnectionsFromId(g, id);
+            for (i = 0; i < size; i++)
+            {
+                for ( j = 0; j < g->num_vertices; j++)
+                    if(vertex_getId(g->vertices[j])==arrayIds[i])   
+                        index=j;
+    
+                if(index < 0)
+               {
+                queue_free(q);
+                return ERROR;
+                }
+                queue_push(q, (void *)g->vertices[index]); 
+            }
+                
+        }
+        
+    }
+    
+    queue_free(q);
+    return ERROR;
+
+}
 
 Status graph_depthSearch (Graph *g, long from_id, long to_id){
 
