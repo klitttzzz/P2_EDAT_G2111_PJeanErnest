@@ -50,7 +50,7 @@ int main(int argc, char const *argv[]){
     fprintf(stdout,"\nTo vertex: %ld ", val2);
     fprintf(stdout,"\nOutput:\n");
     if(!graph_breathSearch(g, val1,val2)){
-        printf("Error en graph_depthSearch");
+        printf("Error en graph_breathSearch");
         return 1;
     }
    
