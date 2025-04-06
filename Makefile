@@ -3,6 +3,7 @@ CFLAGS = -Wall -O2 -pedantic -ansi -g -s
 LDFLAGS = -L. -lqueue -g 
 
 # Archivos fuente y objetos
+
 SRCS = p3_e1.c p3_e2b.c p3_e2a.c
 OBJS = $(SRCS:.c=.o)
 
@@ -18,7 +19,6 @@ p3_e2a: p3_e2a.o graph.o
 
 p3_e2b: p3_e2b.o graph.o vertex.o stack.o queue.o
 	$(CC) -o $@ $^ $(LDFLAGS)
-
 # Compilación de los .o
 
 graph.o: graph.c graph.h vertex.h types.h stack.h file_utils.h stack.h queue.h
