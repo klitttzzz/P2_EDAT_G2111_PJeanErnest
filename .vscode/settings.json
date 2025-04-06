@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "vertex.h": "c",
+        "random": "c"
+    }
+}

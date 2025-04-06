@@ -10,25 +10,29 @@ OBJS = $(SRCS:.c=.o)
 # Ejecutables
 all: p3_e1 p3_e2a p3_e2b
 
-
-# Compilación de los primeros tres programas con libstack
-p3_e1: p3_e1.o delivery.o vertex.o 
+# Compilación de los primeros tres programas con libqueue
+p3_e1: p3_e1.o graph.o
 	$(CC) -o $@ $^ $(LDFLAGS)
 
+p3_e2a: p3_e2a.o graph.o
+	$(CC) -o $@ $^ $(LDFLAGS)
 
+p3_e2b: p3_e2b.o graph.o vertex.o stack.o queue.o
+	$(CC) -o $@ $^ $(LDFLAGS)
 # Compilación de los .o
 
-graph.o: graph.c graph.h vertex.h types.h stack.h file_utils.h
+graph.o: graph.c graph.h vertex.h types.h stack.h file_utils.h stack.h queue.h
 	$(CC) -c $(CFLAGS) -o $@ $<
 
 vertex.o: vertex.c vertex.h types.h
 	$(CC) -c $(CFLAGS) -o $@ $<
 
-queue.o: queue.c queue.h types.h
-	$(CC) -c $(CFLAGS) -o $@ $<
-
 stack.o: stack.c stack.h types.h file_utils.h
 	$(CC) -c $(CFLAGS) -o $@ $<
 
+queue.o: queue.c queue.h types.h file_utils.h
+	$(CC) -c $(CFLAGS) -o $@ $<
+
+# Limpieza de archivos intermedios
 clean:
-	rm -f *.o p3_e1
+	rm -f *.o p3_e1 p3_e2a p3_e2b
