@@ -25,6 +25,11 @@
 #define	LIST_H
 
 #include "types.h"
+#include <stdio.h>
+
+
+/* In list.h */
+typedef struct _List List;
 
 /**
  * List type definition: a list of arbitrary elements.
