@@ -5,13 +5,16 @@ Delivery *build_delivery(FILE *pf);
 
 int main(int argc, char const *argv[])
 {
+    Delivery* a;
     FILE *f;
     f = fopen("requests.txt", "r");
-    if (!build_delivery(f))
+    if (!(a = build_delivery(f)))
     {
         return -1;
     }
     fclose(f);
+
+    delivery_free(a);
     
     return 0;
 }
@@ -51,7 +54,7 @@ Delivery *build_delivery(FILE *pf)
         printf("\n");
     }
 
-        delivery_run_plan(stdout, d, vertex_print, free);
+        delivery_run_plan(stdout, d, vertex_print, vertex_free);
 
     return d;
 }
