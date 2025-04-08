@@ -76,6 +76,8 @@ void delivery_free(void *p)
 
   d = (Delivery *)p;
 
+  delivery_free_products(d, vertex_free);
+
   free(d->name);
   free(d->product_name);
   queue_free(d->plan);
@@ -167,18 +169,18 @@ Status delivery_add(FILE *pf, Delivery *d, void *p, p_element_print f)
  */
 Status delivery_run_plan(FILE *pf, Delivery *d, p_element_print fprint, p_element_free ffree)
 {
-  int i;
+  void *element;
   printf("Running delivery plan for queue: ");
   queue_print(pf, d->plan, fprint);
-  for ( i = 0; i < 4; i++)
-  {
+  
+  while (!queue_isEmpty(d->plan)) {
+    element = queue_pop(d->plan);
     printf("Delivering %s requested by %s to ", d->product_name, d->name);
-    vertex_print(pf,queue_pop(d->plan));
+    fprint(pf, element);
     printf("\n");
+    ffree(element); 
   }
-  
-  
-  
+
   return OK;
 }
 
