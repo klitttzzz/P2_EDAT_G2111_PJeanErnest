@@ -108,7 +108,7 @@ int vertex_print(FILE *pf, const void *v)
     if (!ver || !pf)return -1;
         
     
-    return fprintf(pf, "[%ld, %s, %u, %i]", vertex_getId(ver), vertex_getTag(ver), 0, 0);
+    return fprintf(pf, "[%ld, %s, %u, %i]", vertex_getId(ver), vertex_getTag(ver), vertex_getState(ver), vertex_getIndex(ver));
 
 }
 

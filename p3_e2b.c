@@ -53,6 +53,14 @@ int main(int argc, char const *argv[]){
         printf("Error en graph_breathSearch");
         return 1;
     }
+
+    fprintf(stdout,"From vertex: %ld ", val1);
+    fprintf(stdout,"\nTo vertex: %ld ", val2);
+    fprintf(stdout,"\nOutput:\n");
+    if(!graph_depthSearch(g, val1,val2)){
+        printf("Error en graph_breathSearch");
+        return 1;
+    }
    
     
     graph_free(g);

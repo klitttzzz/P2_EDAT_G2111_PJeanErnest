@@ -412,6 +412,7 @@ Status graph_breathSearch(Graph *g, long from_id, long to_id)
             queue_free(q);
             return ERROR;
         }
+        vertex_setState(v, BLACK);
         vertex_print(stdout, v);
         printf("\n");
         if (vertex_getId(v) == to_id)
@@ -435,7 +436,7 @@ Status graph_breathSearch(Graph *g, long from_id, long to_id)
                     queue_free(q);
                     return ERROR;
                 }
-                vertex_setState(g->vertices[index], BLACK);
+                
                 queue_push(q, (void *)g->vertices[index]);
             }
             free(arrayIds);
